@@ -21,10 +21,12 @@ Jinja2==2.11.2
 lazy-object-proxy==1.4.3
 MarkupSafe==1.1.1
 mccabe==0.6.1
+motor==2.3.0
 orjson==3.4.5
 promise==2.3
 pydantic==1.7.3
 pylint==2.6.0
+pymongo==3.11.2
 python-multipart==0.0.5
 PyYAML==5.3.1
 requests==2.25.0
