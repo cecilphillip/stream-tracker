@@ -3,6 +3,7 @@ aniso8601==7.0.0
 astroid==2.4.2
 async-exit-stack==1.0.1
 async-generator==1.10
+autopep8==1.5.4
 certifi==2020.11.8
 chardet==3.0.4
 click==7.1.2
@@ -19,14 +20,17 @@ isort==5.6.4
 itsdangerous==1.1.0
 Jinja2==2.11.2
 lazy-object-proxy==1.4.3
+loguru==0.5.3
 MarkupSafe==1.1.1
 mccabe==0.6.1
 motor==2.3.0
 orjson==3.4.5
 promise==2.3
+pycodestyle==2.6.0
 pydantic==1.7.3
 pylint==2.6.0
 pymongo==3.11.2
+python-dotenv==0.15.0
 python-multipart==0.0.5
 PyYAML==5.3.1
 requests==2.25.0
