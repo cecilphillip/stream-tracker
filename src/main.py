@@ -4,11 +4,13 @@ from fastapi import FastAPI
 from data import mongo_data
 from models.settings import get_settings
 from routers.channel_router import channel_router
+from routers.status_router import status_router
 from services.logging import get_logger
 
 
 def setup_routing(api: FastAPI):
     api.include_router(channel_router)
+    api.include_router(status_router)
 
 
 def setup_events(api: FastAPI):
