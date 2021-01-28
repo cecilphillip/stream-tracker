@@ -1,7 +1,6 @@
 from fastapi import Response, status
 from fastapi.routing import APIRouter
 
-
 from models.channel import Channel
 from data import mongo_data
 
@@ -15,25 +14,18 @@ async def get_channels():
 
     results = []
     async for channel in channel_collection.find({}):
-           results.append(
-               Channel(**channel)               
-            )
-    
+        results.append(
+            Channel(**channel)
+        )
+
     return results
 
 
-
 @channel_router.post("/")
-async def add_channel(response: Response):
+async def add_channel(channel: Channel, response: Response):
     """
-    Testing out adding a new document
+    /channels handler for adding a new Channel
     """
-    channel = Channel(
-        channel_id = 1,
-        channel_name= "MS Developer",
-        platform = "Twitch",
-        url = "https://twitch.tv/microsoftdeveloper"
-    )
 
     mongo_collection = mongo_data.get_collection('channel')
     result = await mongo_collection.insert_one(channel.dict())
