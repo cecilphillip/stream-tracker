@@ -18,7 +18,7 @@ def setup_events(api: FastAPI):
     api.add_event_handler("shutdown",  mongo_data.close)
 
 
-def get_application() -> FastAPI:    
+def get_application() -> FastAPI:
 
     logger = get_logger()
     logger.debug('Setting up application ...')

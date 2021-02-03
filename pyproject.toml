@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "stream-tracker"
+version = "0.1.0"
+description = "stream tracker api"
+authors = ["Cecil Phillip <you@example.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+motor = "^2.3.0"
+fastapi = {extras = ["full"], version = "^0.63.0"}
+uvicorn = "^0.13.3"
+loguru = "^0.5.3"
+python-dotenv = "^0.15.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.2"
+pytest-pythonpath = "^0.7.3"
+dephell = "^0.8.3"
+autopep8 = "^1.5.4"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+python_paths = "src/"
+addopts = "-q"
+testpaths = [
+    "tests"    
+]

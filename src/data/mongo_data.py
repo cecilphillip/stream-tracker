@@ -28,3 +28,6 @@ def get_database() -> AsyncIOMotorDatabase:
 def get_collection(collection_name: str) -> AsyncIOMotorCollection:
     database = get_database()
     return database.get_collection(collection_name)
+
+def get_channel_collection() -> AsyncIOMotorCollection:
+    return get_collection('channel')
