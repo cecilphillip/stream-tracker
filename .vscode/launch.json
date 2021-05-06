@@ -5,10 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: main.py",
+            "name": "Python: API",
             "type": "python",
             "request": "launch",
-            "cwd": "${workspaceFolder}/src",
+            "cwd": "${workspaceFolder}/src/api",
+            "program": "main.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Background",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/src/background",
             "program": "main.py",
             "console": "integratedTerminal"
         }

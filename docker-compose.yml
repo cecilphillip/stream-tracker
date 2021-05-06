@@ -4,11 +4,11 @@ services:
   ##### MongoDB #####
   mongodb:
     container_name: mongo_service
-    image: mongo:4.4.2
+    image: mongo:4.4.5
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
-      - MONGO_INITDB_DATABASE=stream_tracker    
+      - MONGO_INITDB_DATABASE=stream_tracker
     volumes:
       - ./tmp/mongo/data/db:/data/db
     ports:
