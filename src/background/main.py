@@ -1,6 +1,6 @@
 import os
 import re
-from pprint import pprint
+from rich.console import Console
 from datetime import datetime, timedelta, timezone
 from twitchAPI.twitch import Twitch, VideoType
 from dotenv import load_dotenv
@@ -14,24 +14,21 @@ twitch_id = os.getenv("TWITCH_CLIENT_ID")
 twitch_client = Twitch(twitch_id, twitch_key)
 
 
-def main():
-    md_user = twitch_client.get_users(logins=["DashDucks"])
-    md_user_id = md_user["data"][0]["id"]
+def retrieve_streams(user_id: str) -> list[Stream]:
 
-    results = twitch_client.get_videos(
-        user_id=md_user_id, video_type=VideoType.ARCHIVE)
+    # get videos for user_id
+    # TODO: exception handling at some point
+    user_videos = twitch_client.get_videos(
+        user_id=user_id, video_type=VideoType.ARCHIVE)
 
-    ch = Channel(
-        identifier=md_user_id,
-        name=md_user["data"][0]["display_name"],
-        platform="Twitch"
-    )
-
+    # create regex patterns to match stream duration
     hours_pattern = re.compile(r'\d{1,2}(?=h)')
     minutes_pattern = re.compile(r'\d{1,2}(?=m)')
     seconds_pattern = re.compile(r'\d{1,2}(?=s)')
 
-    for vid in results["data"]:
+    # extract the stream data
+    results: list[Stream] = []
+    for vid in user_videos["data"]:
         duration = vid["duration"]
         date_format = "%Y-%m-%dT%H:%M:%SZ"
         start_date: datetime = datetime.strptime(
@@ -56,9 +53,33 @@ def main():
             start_date=start_date,
             end_date=end_date
         )
-        ch.streams.append(stream)
+        results.append(stream)
 
-    pprint(ch)
+    return results
+
+
+def inspect_channels(channel_names: list[str]) -> list[Channel]:
+    users = twitch_client.get_users(logins=channel_names)
+
+    channels: list[Channel] = []
+    for user in users["data"]:
+        user_id = user["id"]
+
+        ch = Channel(
+            identifier=user_id,
+            name=user["display_name"],
+            platform="Twitch"
+        )
+        ch.streams = retrieve_streams(user_id)
+        channels.append(ch)
+
+    return channels
+
+
+def main():
+    channels = inspect_channels(["DashDucks", "MicrosoftDeveloper"])
+    console = Console()
+    console.print(channels)
 
 
 if __name__ == "__main__":
