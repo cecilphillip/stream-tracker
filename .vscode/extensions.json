@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "ms-python.python",
+        "mongodb.mongodb-vscode",
+        "ms-azuretools.vscode-docker"
+    ]
+}
