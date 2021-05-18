@@ -4,5 +4,9 @@
         "src/api",
         "src/background"
     ],
-    "python.analysis.typeCheckingMode": "basic"
+    "python.analysis.typeCheckingMode": "basic",
+    "files.exclude": {
+        "**/local.env": true
+    },
+    
 }
