@@ -1,7 +1,8 @@
 import os
 import re
+from motor.motor_asyncio import AsyncIOMotorClient
 from rich.console import Console
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from twitchAPI.twitch import Twitch, VideoType
 from dotenv import load_dotenv
 
@@ -10,8 +11,13 @@ from channel import Channel, Stream
 load_dotenv("local.env")
 
 twitch_key = os.getenv("TWITCH_CLIENT_KEY")
-twitch_id = os.getenv("TWITCH_CLIENT_ID")
+twitch_id = os.getenv("TWITCH_CLIENT_ID") or ""
 twitch_client = Twitch(twitch_id, twitch_key)
+
+
+def get_channels_from_environment() -> list[str]:
+    ch_env: str = os.getenv("DEFAULT_TRACKER_CHANNEL_SOURCE") or ""
+    return ch_env.split(", ")
 
 
 def retrieve_streams(user_id: str) -> list[Stream]:
@@ -77,7 +83,21 @@ def inspect_channels(channel_names: list[str]) -> list[Channel]:
 
 
 def main():
-    channels = inspect_channels(["DashDucks", "MicrosoftDeveloper"])
+    # determine channel source
+    ch_source = os.getenv("CHANNEL_SOURCE")
+
+    channel_names: list[str] = []
+    if ch_source == "environment":
+        channel_names = get_channels_from_environment()
+    elif ch_source == "database":
+        pass
+
+    # mongo_connection_str = os.getenv("MONGO_CONNECTION_STRING") or ""
+    # mongo_client: AsyncIOMotorClient = AsyncIOMotorClient(mongo_connection_str)
+    # db_name = os.getenv("MONGO_DATABASE_NAME")
+    # mdb_channel = mongo_client.get_database(db_name).get_collection("channels")
+
+    channels = inspect_channels(channel_names)
     console = Console()
     console.print(channels)
 
