@@ -7,7 +7,6 @@
 use('stream_tracker');
 
 // Delete database
-db.channel.deleteOne({
-  "name": "Microsoft Developer",
-  "stream": "PyWeeky Live"
+db.channel.deleteMany ({
+  "channel_name": "Brian like peanut butter"
 })
