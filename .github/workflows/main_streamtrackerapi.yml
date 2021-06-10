@@ -1,0 +1,51 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - streamtrackerapi
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Log in to registry
+      uses: docker/login-action@v1
+      with:
+        registry: https://streamtracker.azurecr.io/
+        username: ${{ secrets.AzureAppService_ContainerUsername_c642db2ef34d4ebc8961ffd1fa59db48 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_95f889d9613f427492fd40bd1edfbd7d }}
+
+    - name: Build and push container image to registry
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: streamtracker.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_c642db2ef34d4ebc8961ffd1fa59db48 }}/mcr.microsoft.com/streamtracker/trackerapi:${{ github.sha }}
+        file: ./Dockerfile
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'streamtrackerapi'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_1107e8f93a4647a1a287e519ec0cc2b8 }}
+        images: 'streamtracker.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_c642db2ef34d4ebc8961ffd1fa59db48 }}/mcr.microsoft.com/streamtracker/trackerapi:${{ github.sha }}'
